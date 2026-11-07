@@ -8,6 +8,7 @@ import { useId, useState } from 'react'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import { loadI18nResource } from '@/i18n/load-resource'
 import { supportedLocales } from '@/i18n/locale'
+import { namespaces } from '@/i18n/resources'
 import { getInitOptions } from '@/i18n/settings'
 import { getStreamedResources, mergeResources } from '@/i18n/streamed-resources'
 import { I18nDirectionProvider } from './i18n-direction'
@@ -35,8 +36,10 @@ export function I18nClientProvider({
       .use(resourcesToBackend(loadI18nResource))
       .init({
         ...getInitOptions([]),
-        // Register streamed namespaces so language changes load their translations.
-        ns: [...new Set(Object.values(resources).flatMap(Object.keys))],
+        // Register every namespace up front. Only the route's namespaces arrive
+        // in the streamed resources, so deriving `ns` from them would leave the
+        // rest unregistered and make i18next throw during hydration.
+        ns: namespaces,
         lng: locale,
         resources,
         supportedLngs: supportedLocales,
