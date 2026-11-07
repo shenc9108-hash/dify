@@ -23,6 +23,14 @@ jobs:
       - name: Build web (vinext)
         run: pnpm build:vinext
         working-directory: web
+        env:
+          # Browser-side calls go to the same origin; the tunnel/reverse proxy
+          # forwards /console/api and /api to the Dify API.
+          NEXT_PUBLIC_API_PREFIX: /console/api
+          NEXT_PUBLIC_PUBLIC_API_PREFIX: /api
+          # Must not be empty: config/index.ts returns '' instead of the default.
+          NEXT_PUBLIC_SOCKET_URL: wss://di.vddfg99.kdns.fr
+          NEXT_PUBLIC_DEPLOY_ENV: PRODUCTION
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
