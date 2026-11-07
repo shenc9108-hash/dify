@@ -44,7 +44,10 @@ export function I18nClientProvider({
         resources,
         supportedLngs: supportedLocales,
         fallbackNS: false,
-        react: { useSuspense: true },
+        // The server passes `resource={{}}`; bundles arrive asynchronously from
+        // resourcesToBackend. With useSuspense enabled the first client render
+        // throws a Suspense promise and the error boundary blanks the page.
+        react: { useSuspense: false },
       })
     return { i18n, resources }
   })
