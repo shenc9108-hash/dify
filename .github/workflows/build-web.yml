@@ -28,8 +28,10 @@ jobs:
           # forwards /console/api and /api to the Dify API.
           NEXT_PUBLIC_API_PREFIX: /console/api
           NEXT_PUBLIC_PUBLIC_API_PREFIX: /api
-          # Must not be empty: config/index.ts returns '' instead of the default.
-          NEXT_PUBLIC_SOCKET_URL: wss://di.vddfg99.kdns.fr
+          # Keep the built-in default so the app treats collaboration as
+          # unavailable and falls back to the local draft instead of blocking
+          # the canvas on a WebSocket handshake.
+          NEXT_PUBLIC_SOCKET_URL: ws://localhost:5001
           NEXT_PUBLIC_DEPLOY_ENV: PRODUCTION
       - name: Upload dist
         uses: actions/upload-artifact@v4
